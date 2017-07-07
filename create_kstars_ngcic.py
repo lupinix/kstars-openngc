@@ -32,11 +32,15 @@ def getnum(ngcstr):
     if ngcstr[0] == "N":
         if len(ngcstr) == 7:
             return ngcstr[3:7]
+        elif len(ngcstr) == 8:
+            return ngcstr[3:8]
         else:
             return "0"
     elif ngcstr[0] == "I":
         if len(ngcstr) == 6:
             return ngcstr[2:6]
+        elif len(ngcstr) == 7:
+            return ngcstr[2:7]
         else:
             return "0"
     else:
@@ -45,9 +49,9 @@ def getnum(ngcstr):
 def readable_names(ngcstr):
     # Generate better readable names, e.g. NGC 224 instead of NGC0224
     if ngcstr[0] == "N":
-        readable_name = "N " + ngcstr[3:].lstrip("0")
+        readable_name = "N" + ngcstr[3:].lstrip("0").rjust(4)
     elif ngcstr[0] == "I":
-        readable_name = "I " + ngcstr[2:].lstrip("0")
+        readable_name = "I" + ngcstr[2:].lstrip("0").rjust(4)
     else:
         # Change nothing if don't know what to do
         readable_name = ngcstr
@@ -73,6 +77,9 @@ def reformat_dec(dec):
     else:
         return 7*" "
 
+def map_classification(classification):
+    pass
+
 # Vectorize functions for string reformat operations to run them on whole table
 getnum_vect = np.vectorize(getnum)
 readable_names_vect = np.vectorize(readable_names)
@@ -82,6 +89,8 @@ reformat_dec_vect = np.vectorize(reformat_dec)
 def create_kstars_table_line(name, ra, dec, bmag, classification, smin, smax, pa, pgc, other, messier, longname):
     pass
 
+
 ngc_full = ascii.read("OpenNGC/NGC.csv", delimiter=";")
 ngc = ngc_full[getnum_vect(ngc_full["Name"])!="0"]
-
+n = readable_names_vect(ngc["Name"])
+print(n[n=="N7713BA"])
