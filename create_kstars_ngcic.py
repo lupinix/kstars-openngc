@@ -227,7 +227,8 @@ f.write("# Catalog created by: Mattia Verga <mattia dot verga at tiscali dot it>
 f.write("# Converted for KStars by: Christian Dersch <lupinix at mailbox dot org>\n")
 f.write("# License: CC-BY-SA-4.0\n#\n")
 f.write("# Created using 8feb65904a1c5f7f0075f8faaff3beebad370f6e from\n# https://github.com/mattiaverga/OpenNGC\n")
-f.write("# Conversion script: https://github.com/lupinix/kstars-openngc\n")
+f.write("# Conversion script: https://github.com/lupinix/kstars-openngc\n#\n")
+f.write("#ID     RA        Dec  BMag type  a     b   pa   PGC  other           Messr Longname\n#\n")
 # Some non-ngcic-objects
 f.write("    0 052334.5 -694522  0.9  8   0.0            17223 ESO  56- G 115        Large Magellanic Cloud\n\
     0 181654.0 -182900  4.6  3  15.0                                  M  24 Delle Caustiche\n\
