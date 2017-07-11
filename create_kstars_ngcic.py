@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# Copyright (c) 2017 Christian Dersch
+# Copyright (c) 2017 Christian Dersch <lupinix@mailbox.org>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,51 @@ def reformat_dec(dec):
         return 7*" "
 
 def map_classification(classification):
-    pass
+    """
+    Mapping KStars ngcic.dat → OpenNGC
+    
+    OpenNGC      KStars ngcic     Type
+    
+    *                1            Star
+    **               17           Double Star
+    *Ass             13           Association of stars (13 matches better than 5)
+    Ocl              3            Open Cluster
+    Gcl              4            Globular Cluster
+    Cl+N             5            Star cluster + Nebula
+    G                8            Galaxy
+    GPair            8            Galaxy Pair
+    GTrpl            8            Galaxy Triplet
+    GGroup           8            Group of galaxies
+    PN               6            Planetary Nebula
+    HII              5            HII Ionized region
+    EmN              5            Emission Nebula
+    Neb              5            Nebula
+    RfN              5            Reflection Nebula
+    SNR              7            Supernova remnant
+    Nova                          Nova star
+    NonEx                         Nonexistent object
+    Dup                           Duplicate
+    Other                         Other
+    """
+    mapping = {
+        "*": "1",
+        "**": "17",
+        "*Ass": "13",
+        "OCl": "3",
+        "GCl": "4",
+        "Cl+N": "5",
+        "G": "8",
+        "GPair": "8",
+        "GTrpl": "8",
+        "GGroup": "8",
+        "PN": "6",
+        "HII": "5",
+        "EmN": "5",
+        "Neb": "5",
+        "RfN": "5",
+        "SNR": "7"
+    }
+    return mapping.get(classification, " ")
 
 # Vectorize functions for string reformat operations to run them on whole table
 getnum_vect = np.vectorize(getnum)
@@ -90,7 +134,8 @@ def create_kstars_table_line(name, ra, dec, bmag, classification, smin, smax, pa
     pass
 
 
-ngc_full = ascii.read("OpenNGC/NGC.csv", delimiter=";")
-ngc = ngc_full[getnum_vect(ngc_full["Name"])!="0"]
-n = readable_names_vect(ngc["Name"])
-print(n[n=="N7713BA"])
+#ngc_full = ascii.read("OpenNGC/NGC.csv", delimiter=";")
+#ngc = ngc_full[getnum_vect(ngc_full["Name"])!="0"]
+#n = readable_names_vect(ngc["Name"])
+#print(n[n=="N7713BA"])
+print(map_classification("*s*"))
