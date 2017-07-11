@@ -55,12 +55,15 @@ def readable_names(ngcstr):
     else:
         # Change nothing if don't know what to do
         readable_name = ngcstr
-    return readable_name
+    return readable_name.ljust(6)
 
 def reformat_ra(ra):
     if ra[0] == "0" or ra[0] == "1" or ra[0] == "2": 
         ra_string = ra.replace(":","")
-        return ra_string[:-1] 
+        if len(ra_string) > 8:
+            return ra_string[:-1]
+        else:
+            return ra_string
     else:
         return 8*" "
 
@@ -122,20 +125,118 @@ def map_classification(classification):
         "RfN": "5",
         "SNR": "7"
     }
-    return mapping.get(classification, " ")
+    return mapping.get(classification, " ").rjust(2)
+
+
+def extract_pgcnum(id_list):
+    if id_list != "--":
+        s = id_list.split(",")
+        for id in s:
+            if id[0:3] == "PGC":
+                pgc = id[3:].strip().lstrip("0").rjust(6)
+                if len(pgc) <= 6:
+                    return pgc
+        return 6*" "
+    else:
+        return 6*" "
+        
+
+def extract_ugcnum(id_list):
+    if id_list != "--":
+        s = id_list.split(",")
+        for id in s:
+            if id[0:3] == "UGC":
+                return ("UGC" + id[3:].strip().lstrip("0").rjust(6)).ljust(15)
+        return 15*" "
+    else:
+        return 15*" "
+
+def messier_str(messier):
+    if messier != "--":
+        return "M " + str(messier).rjust(3)
+    else:
+        return 5*" "
 
 # Vectorize functions for string reformat operations to run them on whole table
 getnum_vect = np.vectorize(getnum)
 readable_names_vect = np.vectorize(readable_names)
 reformat_ra_vect = np.vectorize(reformat_ra)
 reformat_dec_vect = np.vectorize(reformat_dec)
+map_classification_vect = np.vectorize(map_classification)
+extract_pgcnum_vect = np.vectorize(extract_pgcnum)
+extract_ugcnum_vect = np.vectorize(extract_ugcnum)
 
-def create_kstars_table_line(name, ra, dec, bmag, classification, smin, smax, pa, pgc, other, messier, longname):
-    pass
+def create_kstars_table_line(name, ra, dec, bmag, classification, smax, smin, pa, others, messier, longname):
+    s = ""
+    s += readable_names(name)
+    if ra != "--":
+        s += reformat_ra(ra)
+    else:
+        s += 8*" "
+    s += " "
+    if dec != "--":
+        s += reformat_dec(dec)
+    else:
+        s += 7*" "
+    s += " "
+    if bmag != "--":
+        s += "{:05.2f}".format(bmag)
+    else:
+        s += 5*" "
+    s += map_classification(classification)
+    s += " "
+    if smax != "--":
+        if smax < 100:
+            s += "{:05.2f}".format(smax)
+        else:
+            s += "{:05.1f}".format(smax)
+    else:
+        s += 5*" "
+    s += " "
+    if smin != "--":
+        if smin < 100:
+            s += "{:05.2f}".format(smin)
+        else:
+            s += "{:05.1f}".format(smin)
+    else:
+        s += 5*" "
+    s += " "
+    if pa != "--":
+        s += "{:3d}".format(pa)
+    else:
+        s+= 3*" "
+    s += " "
+    s += extract_pgcnum(others)
+    s += " "
+    s += extract_ugcnum(others)
+    s += " "
+    s += messier_str(messier)
+    s += " "
+    if longname != "--":
+        s += str(longname)
+    s += "\n"
+    return s
 
 
-#ngc_full = ascii.read("OpenNGC/NGC.csv", delimiter=";")
-#ngc = ngc_full[getnum_vect(ngc_full["Name"])!="0"]
-#n = readable_names_vect(ngc["Name"])
-#print(n[n=="N7713BA"])
-print(map_classification("*s*"))
+ngc_full = ascii.read("OpenNGC/NGC.csv", delimiter=";")
+ngc = ngc_full[getnum_vect(ngc_full["Name"])!="0"]
+f = open("ngcic.dat","w")
+# Header
+f.write("# OpenNGC - A license friendly NGC/IC objects database\n")
+f.write("# Catalog created by: Mattia Verga <mattia dot verga at tiscali dot it>\n")
+f.write("# Converted for KStars by: Christian Dersch <lupinix at mailbox dot org>\n")
+f.write("# License: CC-BY-SA-4.0\n#\n")
+f.write("# Created using 8feb65904a1c5f7f0075f8faaff3beebad370f6e from\n# https://github.com/mattiaverga/OpenNGC\n")
+f.write("# Conversion script: https://github.com/lupinix/kstars-openngc\n")
+# Some non-ngcic-objects
+f.write("    0 052334.5 -694522  0.9  8   0.0            17223 ESO  56- G 115        Large Magellanic Cloud\n\
+    0 181654.0 -182900  4.6  3  15.0                                  M  24 Delle Caustiche\n\
+    0 034700.0 +240700  1.6  3  70.0                                  M  45 Pleiades\n\
+    0 122224.0 +580500  8.4  1   0.0   0.0                            M  40\n\
+    0 192524.0 +201100  3.6  3  60.0                  Collinder 399         Brocchi's Cluster, Coathanger Asterism\n\
+    0 122230.3 +255042  1.8  3 270.0                  Melotte 111           Melotte 111, Coma Star Cluster\n")
+
+for i in range(len(ngc)):
+    ngc1 = ngc[i]
+    f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["Smax"],ngc1["Smin"],ngc1["PosAng"],ngc1["Identifiers"],ngc1["M"],ngc1["Common names"]))
+f.close()
