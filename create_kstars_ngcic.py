@@ -226,7 +226,7 @@ f.write("# OpenNGC - A license friendly NGC/IC objects database\n")
 f.write("# Catalog created by: Mattia Verga <mattia dot verga at tiscali dot it>\n")
 f.write("# Converted for KStars by: Christian Dersch <lupinix at mailbox dot org>\n")
 f.write("# License: CC-BY-SA-4.0\n#\n")
-f.write("# Created using 8feb65904a1c5f7f0075f8faaff3beebad370f6e from\n# https://github.com/mattiaverga/OpenNGC\n")
+f.write("# Created using b996b6d483369d01e31d44a35016f9bb35d90cf5 from\n# https://github.com/mattiaverga/OpenNGC\n")
 f.write("# Conversion script: https://github.com/lupinix/kstars-openngc\n#\n")
 f.write("#ID     RA        Dec  BMag type  a     b   pa   PGC  other           Messr Longname\n#\n")
 # Some non-ngcic-objects
