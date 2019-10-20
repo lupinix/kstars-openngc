@@ -240,9 +240,9 @@ f.write("    0 052334.5 -694522  0.9  8   0.0            17223 ESO  56- G 115   
 
 for i in range(len(ngc)):
     ngc1 = ngc[i]
-    if ngc1["M"] == 101:
-        # Workaround for M 102 which is a duplicate of M 101, we want the user to be able to search for M 102 although not in catalog
-        f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["MajAx"],ngc1["MinAx"],ngc1["PosAng"],ngc1["Identifiers"],ngc1["M"],"M 102"))
+    if ngc1["Name"] == "NGC5866":
+        # Workaround for M 102 which is referenced to NGC 5866 nowadays, we want the user to be able to search for M 102 although not in catalog
+        f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["MajAx"],ngc1["MinAx"],ngc1["PosAng"],ngc1["Identifiers"],"102",ngc1["Common names"]))
     else:
         f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["MajAx"],ngc1["MinAx"],ngc1["PosAng"],ngc1["Identifiers"],ngc1["M"],ngc1["Common names"]))
 f.close()

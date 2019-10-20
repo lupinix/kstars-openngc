@@ -227,7 +227,7 @@ f.write("# OpenNGC - A license friendly NGC/IC objects database\n")
 f.write("# Catalog created by: Mattia Verga <mattia dot verga at tiscali dot it>\n")
 f.write("# Converted for KStars by: Christian Dersch <lupinix at mailbox dot org>\n")
 f.write("# License: CC-BY-SA-4.0\n#\n")
-f.write("# Created using 2f609e628961bce1c24047e1bafb57a41d994f44 from\n# https://github.com/mattiaverga/OpenNGC\n")
+f.write("# Created using 47deb7baa7ae8867e979b9d25b3e2edadab4ef85 from\n# https://github.com/mattiaverga/OpenNGC\n")
 f.write("# Conversion script: https://github.com/lupinix/kstars-openngc\n#\n")
 f.write("#ID     RA        Dec  BMag type  a     b   pa   PGC  other           Messr Longname\n#\n")
 # Some non-ngcic-objects
@@ -240,9 +240,9 @@ f.write("    0 052334.5 -694522  0.9  8   0.0            17223 ESO  56- G 115   
 
 for i in range(len(ngc)):
     ngc1 = ngc[i]
-    if ngc1["M"] == 101:
-        # Workaround for M 102 which is a duplicate of M 101, we want the user to be able to search for M 102 although not in catalog
-        f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["MajAx"],ngc1["MinAx"],ngc1["PosAng"],ngc1["Identifiers"],ngc1["M"],"M 102"))
+    if ngc1["Name"] == "NGC5866":
+        # Workaround for M 102 which is referenced to NGC 5866 nowadays, we want the user to be able to search for M 102 although not in catalog
+        f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["MajAx"],ngc1["MinAx"],ngc1["PosAng"],ngc1["Identifiers"],"102",ngc1["Common names"]))
     else:
         f.write(create_kstars_table_line(ngc1["Name"],ngc1["RA"],ngc1["Dec"],ngc1["B-Mag"],ngc1["Type"],ngc1["MajAx"],ngc1["MinAx"],ngc1["PosAng"],ngc1["Identifiers"],ngc1["M"],ngc1["Common names"]))
 f.close()
